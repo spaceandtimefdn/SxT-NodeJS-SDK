@@ -8,10 +8,8 @@ dotenv.config();
 
 export default class DiscoveryAPI {
     private PossibleScopes: string[] = [
-        "PRIVATE",
         "SUBSCRIPTION",
         "PUBLIC",
-        "ALL",
     ];
     private PossibleSchemaTypes: string[] = ["core", "sxt", "community"];
 
@@ -28,7 +26,7 @@ export default class DiscoveryAPI {
             } else {
                 return {
                     error: new Error(
-                        "Possible scope values are `PRIVATE`, `SUBSCRIPTION`, `PUBLIC`, `ALL`. Only capitals accepted"
+                        "Possible scope values are `SUBSCRIPTION`, `PUBLIC`. Only capitals accepted"
                     ),
                 };
             }
@@ -61,7 +59,7 @@ export default class DiscoveryAPI {
         if (!this.PossibleScopes.includes(scope)) {
             return {
                 error: new Error(
-                    "Possible scope values are `PRIVATE`, `SUBSCRIPTION`, `PUBLIC`, `ALL`. Only capitals accepted"
+                    "Possible scope values are `SUBSCRIPTION`, `PUBLIC`. Only capitals accepted"
                 ),
             };
         }
@@ -149,7 +147,7 @@ export default class DiscoveryAPI {
         if (!this.PossibleScopes.includes(scope)) {
             return {
                 error: new Error(
-                    "Possible scope values are `PRIVATE`, `SUBSCRIPTION`, `PUBLIC`, `ALL`. Only capitals accepted"
+                    "Possible scope values are `SUBSCRIPTION`, `PUBLIC`. Only capitals accepted"
                 ),
             };
         }
@@ -225,7 +223,7 @@ export default class DiscoveryAPI {
         if (!this.PossibleScopes.includes(scope)) {
             return {
                 error: new Error(
-                    "Possible scope values are `PRIVATE`, `SUBSCRIPTION`, `PUBLIC`, `ALL`. Only capitals accepted"
+                    "Possible scope values are `SUBSCRIPTION`, `PUBLIC`. Only capitals accepted"
                 ),
             };
         }
@@ -254,56 +252,7 @@ export default class DiscoveryAPI {
 
     // List Blockchains
     ListBlockchains = async (): Promise<Types.APIResponse> => {
-        const endpoint: string = `/v2/discover/blockchains`;
-
-        const options = {
-            method: "GET",
-            url: `${process.env.BASEURL_GENERAL}${endpoint}`,
-            headers: {
-                accept: "application/json",
-                authorization: `Bearer ${GetAccessToken().accessToken}`,
-            },
-        };
-
-        return QueryHelper(options, 200);
-    };
-
-    // List Blockchain schemas
-    ListBlockchainSchemas = async (
-        chainId: string,
-        schemaType?: string
-    ): Promise<Types.APIResponse> => {
-        let endpoint: string = `/v2/discover/blockchains/${chainId}/schemas`;
-
-        if (typeof schemaType !== "undefined") {
-            if (this.PossibleSchemaTypes.includes(schemaType)) {
-                endpoint = `${endpoint}?schemaType=${schemaType}`;
-            } else {
-                return {
-                    error: new Error(
-                        "Possible schema type values are `sxt`, `community`, `core`"
-                    ),
-                };
-            }
-        }
-
-        const options = {
-            method: "GET",
-            url: `${process.env.BASEURL_GENERAL}${endpoint}`,
-            headers: {
-                accept: "application/json",
-                authorization: `Bearer ${GetAccessToken().accessToken}`,
-            },
-        };
-
-        return QueryHelper(options, 200);
-    };
-
-    // List Blockchain information
-    ListBlockchainInformation = async (
-        chainId: string
-    ): Promise<Types.APIResponse> => {
-        let endpoint: string = `/v2/discover/blockchains/${chainId}/meta`;
+        const endpoint: string = `/v1/chain-meta/aggregate`;
 
         const options = {
             method: "GET",
